@@ -21,7 +21,7 @@ server = sock.listen(9000);
 server.on('connection', function(client) {
   console.log('Incoming connection');
   
-  socket.on('pong', function(){ console.log('Got pong from client.');
+  socket.on('pong', function(){ console.log('Got pong from client.'); });
   socket.emit('ping', {hello: 'world'}, new Buffer('look, binary data!'));
 });
 ```
