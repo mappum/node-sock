@@ -25,7 +25,11 @@ class Client extends EventEmitter
     @socket.on 'data', @onData.bind(@)
 
   onData: (data) ->
-    @_emit.apply @, @unpack(data)
+    offset = 0
+    while offset < data.length
+      unpacked = @unpack data.slice offset
+      @_emit.apply @, unpacked
+      offset += unpacked.size
 
   emit: ->
     buffer = @pack.apply @, Array::slice.call(arguments, 0)
@@ -44,6 +48,7 @@ class Client extends EventEmitter
       args.push msgpack.decode data.slice offset, offset + argLength
       offset += argLength
 
+    args.size = offset
     args
 
   pack: (event) ->
