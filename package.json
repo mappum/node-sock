@@ -1,10 +1,9 @@
 {
   "name": "sock",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A simple network transport for talking between Node instances",
   "main": "index.js",
   "dependencies": {
-    "msgpack-js": "~0.1.5",
     "coffee-script": "~1.6.1"
   },
   "scripts": {
@@ -16,6 +15,12 @@
     "socket",
     "server"
   ],
-  "author": "Matt Bell <mappum@gmail.com>",
-  "license": "BSD"
+  "author": {
+    "name": "Matt Bell",
+    "email": "mappum@gmail.com"
+  },
+  "license": "BSD",
+  "_id": "sock@0.0.0",
+  "readme": "ERROR: No README.md file found!",
+  "_from": "sock@"
 }
