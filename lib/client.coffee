@@ -39,6 +39,11 @@ class Client extends EventEmitter
     @buffer = new Buffer 0
     @socket.on 'data', @onData.bind(@)
     @socket.setNoDelay()
+    
+    onEnd = @onEnd.bind @
+    @socket.on 'end', onEnd
+    @socket.on 'error', onEnd
+    @socket.on 'close', onEnd
 
   onData: (data) ->
     @buffer = if @buffer? then Buffer.concat [@buffer, data] else data
@@ -51,6 +56,12 @@ class Client extends EventEmitter
       @buffer = @buffer.slice unpacked.size
       @buffer = null if @buffer.length == 0
       @_emit.apply @, unpacked
+
+  onEnd: (err) ->
+    if not @socket.disconnected
+      @socket.disconnected = true
+      @socket.destroy()
+      @_emit 'disconnect', err
 
   emit: ->
     buffer = @pack.apply @, Array::slice.call(arguments, 0)
