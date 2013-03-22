@@ -10,8 +10,11 @@ class Server extends EventEmitter
 
     if typeof port == 'string'
       split = port.split ':'
-      host = split[0]
-      port = split[1] or 8000
+      if split.length > 1
+        host = split[0]
+        port = parseInt(split[1]) or 8000
+      else
+        port = parseInt(split[0]) or 8000
 
     else if typeof port != 'number'
       throw new Error 'Invalid port argument, must be a string or number'
