@@ -68,13 +68,14 @@ class Client extends EventEmitter
     @socket.write buffer
 
   getArg: (data, offset) ->
-      argLength = data.readUInt32LE offset
-      offset += 4
-      return false if argLength + offset > data.length
-      return {
-        arg: JSON.parse data.slice(offset, offset + argLength).toString('utf8')
-        offset: offset + argLength
-      }
+    return false if offset + 4 > data.length
+    argLength = data.readUInt32LE offset
+    offset += 4
+    return false if argLength + offset > data.length
+    return {
+      arg: JSON.parse data.slice(offset, offset + argLength).toString('utf8')
+      offset: offset + argLength
+    }
 
   unpack: (data) ->
     eventLength = data.readUInt8 0
