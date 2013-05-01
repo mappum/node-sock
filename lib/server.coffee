@@ -20,6 +20,8 @@ class Server extends EventEmitter
       throw new Error 'Invalid port argument, must be a string or number'
 
     @server.listen port, host
+    @port = port
+    @host = host
 
   onConnection: (client) ->
     @_emit 'connection', new Client client
