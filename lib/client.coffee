@@ -1,6 +1,10 @@
 net = require 'net'
 EventEmitter = require('events').EventEmitter
 
+REQ_ESCAPE = '#req:'
+
+toArray = (a) -> Array.prototype.slice.call a
+
 removeBuffers = (args) ->
   output = {length: 0}
   for arg, i in args
@@ -67,8 +71,37 @@ class Client extends EventEmitter
       @_emit 'disconnect', err
 
   emit: ->
-    buffer = @pack.apply @, Array::slice.call(arguments, 0)
+    console.log toArray(arguments)
+    buffer = @pack.apply @, toArray(arguments)
     @socket.write buffer
+
+  request: ->
+    args = toArray arguments
+    listener = args.splice(args.length-1, 1)[0]
+    listener = null if typeof listener != 'function'
+
+    # generate request id and insert as first argument after event name
+    id = REQ_ESCAPE + Math.floor(Math.random() * 2821109907455).toString(36)
+
+    # listen for response
+    @once id, listener
+
+    # send request data
+    args.splice 1, 0, id
+    @emit.apply @, args
+    @
+
+  # TODO: make a one-time response method
+  respond: (event, listener) ->
+    @on event, (id) =>
+      if typeof id == 'string' and id.substr(0, REQ_ESCAPE.length) == REQ_ESCAPE
+        # callback for responding to request
+        res = => @emit id, toArray(arguments)
+
+        # insert response function and call listener
+        args = toArray arguments
+        args.splice 0, 1, res
+        listener.apply @, args
 
   getArg: (data, offset) ->
     return false if offset + 4 > data.length
