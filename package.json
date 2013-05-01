@@ -1,6 +1,6 @@
 {
   "name": "sock",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A simple network transport for talking between Node instances",
   "main": "index.js",
   "dependencies": {
