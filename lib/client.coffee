@@ -95,7 +95,10 @@ class Client extends EventEmitter
     @on event, (id) =>
       if typeof id == 'string' and id.substr(0, REQ_ESCAPE.length) == REQ_ESCAPE
         # callback for responding to request
-        res = => @emit id, toArray(arguments)
+        res = =>
+          args = toArray arguments
+          args.splice 0, 0, id
+          @emit.apply @, args
 
         # insert response function and call listener
         args = toArray arguments
