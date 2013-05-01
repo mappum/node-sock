@@ -71,7 +71,6 @@ class Client extends EventEmitter
       @_emit 'disconnect', err
 
   emit: ->
-    console.log toArray(arguments)
     buffer = @pack.apply @, toArray(arguments)
     @socket.write buffer
 
