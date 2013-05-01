@@ -45,6 +45,9 @@ class Client extends EventEmitter
     @socket.on 'error', onEnd
     @socket.on 'close', onEnd
 
+    @remoteAddress = @socket.remoteAddress
+    @remotePort = @socket.remotePort
+
   onData: (data) ->
     @buffer = if @buffer? then Buffer.concat [@buffer, data] else data
 
