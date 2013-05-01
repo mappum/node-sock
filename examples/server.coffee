@@ -6,3 +6,7 @@ server.on 'connection', (client) ->
 
   client.on 'pong', -> console.log 'got pong'
   client.emit 'ping', {hello: 'world'}, 'another argument', new Buffer('a buffer')
+
+  client.respond 'hello', (res) ->
+    console.log 'got "hello" request'
+    res 'hi'
